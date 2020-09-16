@@ -45,6 +45,30 @@ func CreateCategory(c *fiber.Ctx) {
 	c.JSON(fiber.Map{"status": "success", "message": "Created category", "data": category})
 }
 
+func UpdateCategory(c *fiber.Ctx) {
+	id := c.Params("id")
+	db := database.DB
+	form := new(model.Category)
+	if err := c.BodyParser(&form); err != nil {
+		c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't update category", "data": nil})
+		return
+	}
+	var category model.Category
+	db.First(&category, id)
+	if category.ID == 0 {
+		c.Status(404).JSON(fiber.Map{"status": "error", "message": "No category found with ID", "data": nil})
+		return
+	}
+	category.Name = form.Name
+	category.Description = form.Description
+	db.Save(&category)
+	if db.Error != nil {
+		c.Status(500).JSON(fiber.Map{"status": "error", "message": db.Error, "data": nil})
+		return
+	}
+	c.JSON(fiber.Map{"status": "success", "message": "Updated category", "data": category})
+}
+
 func DeleteCategory(c *fiber.Ctx) {
 	id := c.Params("id")
 	db := database.DB

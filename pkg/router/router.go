@@ -21,6 +21,7 @@ func SetupRoutes(app *fiber.App) {
 	category.Get("/", middleware.Protected(), handler.GetAllCategories)
 	category.Get("/:id", middleware.Protected(), handler.GetCategory)
 	category.Post("/", middleware.Protected(), handler.CreateCategory)
+	category.Put("/:id", middleware.Protected(), handler.UpdateCategory)
 	category.Delete("/:id", middleware.Protected(), handler.DeleteCategory)
 
 	// Languages
