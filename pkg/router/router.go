@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/logger"
 )
 
+// SetupRoutes sets the routes up in the rest api
 func SetupRoutes(app *fiber.App) {
 	api := app.Group("/api/v1", logger.New())
 	api.Get("/", handler.Hello)
@@ -44,6 +45,7 @@ func SetupRoutes(app *fiber.App) {
 	questions.Get("/:id", handler.Hello)
 	questions.Post("/", middleware.Protected(), handler.Hello)
 	questions.Delete("/:id", middleware.Protected(), handler.Hello)
+	// todo: add questions of a platform, of a category, of a language, etc
 
 	// Quizzes
 	quizzes := api.Group("/quizzes")
@@ -51,5 +53,5 @@ func SetupRoutes(app *fiber.App) {
 	quizzes.Get("/:id", handler.Hello)
 	quizzes.Post("/", middleware.Protected(), handler.Hello)
 	quizzes.Delete("/:id", middleware.Protected(), handler.Hello)
-
+	// todo: add quizzes of a platform, of a category, of a language, etc
 }

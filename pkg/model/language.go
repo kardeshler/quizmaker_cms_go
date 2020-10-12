@@ -1,6 +1,10 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
+
+	"github.com/jinzhu/gorm"
+)
 
 type Language struct {
 	gorm.Model
@@ -15,6 +19,19 @@ type LanguageCreate struct {
 }
 
 type LanguageGet struct {
-	LanguageCreate
-	ID uint64
+	ID        uint
+	Name      string
+	ShortName string
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (l *Language) LanguageGet() LanguageGet {
+	return LanguageGet{
+		ID:        l.ID,
+		Name:      l.Name,
+		ShortName: l.ShortName,
+		CreatedAt: l.CreatedAt,
+		UpdatedAt: l.UpdatedAt,
+	}
 }
