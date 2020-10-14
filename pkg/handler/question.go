@@ -13,9 +13,9 @@ func GetAllQuestions(c *fiber.Ctx) {
 	var questions []model.Question
 
 	db.Find(&questions)
-	questionList := make([]model.Question, len(questions))
+	questionList := make([]model.QuestionGet, len(questions))
 	for index, question := range questions {
-		questionList[index] = question
+		questionList[index] = question.QuestionGet()
 	}
 	c.JSON(fiber.Map{"status": "success", "message": "All questions", "data": questionList})
 }
