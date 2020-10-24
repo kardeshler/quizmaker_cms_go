@@ -4,22 +4,47 @@ import "github.com/jinzhu/gorm"
 
 type Question struct {
 	gorm.Model
-	Content string
-	Hint    string
-	Quizzes []Quiz `gorm:"many2many:question_quizzes;"`
+	Content  string
+	Hint     string
+	Language Language `gorm:"foreignKey:LanguageId"`
+	Quizzes  []Quiz   `gorm:"many2many:question_quizzes;"`
+	Answers  []string
 }
 
+// QuestionGet is the getter for question type
+func (q *Question) QuestionGet() QuestionGet {
+	quizIDs := make([]uint, len(q.Quizzes))
+	for index, quiz := range q.Quizzes {
+		quizIDs[index] = quiz.ID
+	}
+
+	return QuestionGet{
+		ID:      q.ID,
+		Content: q.Content,
+		Hint:    q.Hint,
+		LangID:  q.Language.ID,
+		QuizIDs: quizIDs,
+		Answers: q.Answers,
+	}
+}
+
+// QuestionCreate type for creating questions
 type QuestionCreate struct {
 	Content string
 	Hint    string
-	LangId  uint64
-	QuizIds []uint64
+	LangID  uint64
+	QuizIDs []uint64
 	Answers []string
 }
 
+// QuestionGet type is used to read questions
 type QuestionGet struct {
-	QuestionCreate
-	ID uint64
+	ID      uint
+	Content string
+	Hint    string
+	LangID  uint
+	QuizIDs []uint
+	Answers []string
 }
 
 type QuestionAnswerUpdate struct {
