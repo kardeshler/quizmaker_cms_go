@@ -101,3 +101,30 @@ func DeletePlatform(c *fiber.Ctx) {
 
 	c.JSON(fiber.Map{"status": "success", "message": "Deleted platform", "data": nil})
 }
+
+// GetQuizzesOfPlatform returns all quizzes of a given platform
+func GetQuizzesOfPlatform(c *fiber.Ctx) {
+	id := c.Params("id")
+	db := database.DB
+	var platform model.Platform
+
+	db.First(&platform, id)
+	if platform.ID == 0 {
+		c.Status(404).JSON(fiber.Map{"status": "error", "message": "Platform not found!", "data": nil})
+		return
+	}
+
+	quizzes := make([]model.Quiz, 0)
+	db.Preload("Platforms").Find(&quizzes)
+
+	if db.Error != nil {
+		c.Status(500).JSON(fiber.Map{"status": "error", "message": "Could not get questions of the platform!", "data": nil})
+		return
+	}
+
+	quizList := make([]model.QuizGet, len(quizzes))
+	for index, quiz := range quizzes {
+		quizList[index] = quiz.QuizGet()
+	}
+	c.JSON(fiber.Map{"status": "success", "message": "Quizzes of the platform", "data": quizList})
+}

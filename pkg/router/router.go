@@ -38,6 +38,8 @@ func SetupRoutes(app *fiber.App) {
 	platform.Get("/:id", handler.Hello)
 	platform.Post("/", middleware.Protected(), handler.Hello)
 	platform.Delete("/:id", middleware.Protected(), handler.Hello)
+	platform.Get("/:id/questions", handler.Hello)
+	platform.Get("/:id/quizzes", handler.Hello)
 
 	// Questions
 	questions := api.Group("/questions")

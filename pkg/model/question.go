@@ -18,13 +18,17 @@ func (q *Question) QuestionGet() QuestionGet {
 		quizIDs[index] = quiz.ID
 	}
 
-	return QuestionGet{
-		ID:      q.ID,
+	questionCreate := QuestionCreate{
 		Content: q.Content,
 		Hint:    q.Hint,
 		LangID:  q.Language.ID,
 		QuizIDs: quizIDs,
 		Answers: q.Answers,
+	}
+
+	return QuestionGet{
+		ID:             q.ID,
+		QuestionCreate: questionCreate,
 	}
 }
 
@@ -32,19 +36,15 @@ func (q *Question) QuestionGet() QuestionGet {
 type QuestionCreate struct {
 	Content string
 	Hint    string
-	LangID  uint64
-	QuizIDs []uint64
+	LangID  uint
+	QuizIDs []uint
 	Answers []string
 }
 
 // QuestionGet type is used to read questions
 type QuestionGet struct {
-	ID      uint
-	Content string
-	Hint    string
-	LangID  uint
-	QuizIDs []uint
-	Answers []string
+	ID uint
+	QuestionCreate
 }
 
 type QuestionAnswerUpdate struct {

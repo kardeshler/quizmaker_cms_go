@@ -7,11 +7,13 @@ import (
 	"strconv"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres dialect
 )
 
+// DB instance
 var DB *gorm.DB
 
+// ConnectDB connection to the db with the config package
 func ConnectDB() {
 	var err error
 	p := config.Config("DB_PORT")
@@ -27,9 +29,9 @@ func ConnectDB() {
 
 	fmt.Println("Connection opened to databae")
 	DB.AutoMigrate(&model.Category{})
-	DB.AutoMigrate(&model.Language{})
+	/*DB.AutoMigrate(&model.Language{})
 	DB.AutoMigrate(&model.Platform{})
 	DB.AutoMigrate(&model.Question{})
-	DB.AutoMigrate(&model.Quiz{})
+	DB.AutoMigrate(&model.Quiz{})*/
 	fmt.Println("Database Migrated")
 }
