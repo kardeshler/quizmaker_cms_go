@@ -7,8 +7,8 @@ type Question struct {
 	Content  string
 	Hint     string
 	Language Language `gorm:"foreignKey:LanguageId"`
-	Quizzes  []Quiz   `gorm:"many2many:question_quizzes;"`
-	Answers  []string
+	Quizzes  []Quiz   `gorm:"many2many:quiz_questions;"`
+	Options  []Option
 }
 
 // QuestionGet is the getter for question type
@@ -18,12 +18,17 @@ func (q *Question) QuestionGet() QuestionGet {
 		quizIDs[index] = quiz.ID
 	}
 
+	optionIDs := make([]uint, len(q.Options))
+	for index, option := range q.Options {
+		optionIDs[index] = option.ID
+	}
+
 	questionCreate := QuestionCreate{
-		Content: q.Content,
-		Hint:    q.Hint,
-		LangID:  q.Language.ID,
-		QuizIDs: quizIDs,
-		Answers: q.Answers,
+		Content:   q.Content,
+		Hint:      q.Hint,
+		LangID:    q.Language.ID,
+		QuizIDs:   quizIDs,
+		OptionIDs: optionIDs,
 	}
 
 	return QuestionGet{
@@ -34,11 +39,11 @@ func (q *Question) QuestionGet() QuestionGet {
 
 // QuestionCreate type for creating questions
 type QuestionCreate struct {
-	Content string
-	Hint    string
-	LangID  uint
-	QuizIDs []uint
-	Answers []string
+	Content   string
+	Hint      string
+	LangID    uint
+	QuizIDs   []uint
+	OptionIDs []uint
 }
 
 // QuestionGet type is used to read questions

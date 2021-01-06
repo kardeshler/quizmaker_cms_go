@@ -6,10 +6,10 @@ type Quiz struct {
 	gorm.Model
 	Name        string
 	Description string
-	Platform    Platform
+	Platform    Platform   `gorm:"foreignKey:PlatformId"`
 	Language    Language   `gorm:"foreignKey:LanguageId"`
 	Questions   []Question `gorm:"many2many:quiz_questions;"`
-	Categories  []Category `gorm:"many2many:quiz_categories;"`
+	Categories  []Category `gorm:"many2many:category_quizzes;"`
 }
 
 func (q *Quiz) QuizGet() QuizGet {

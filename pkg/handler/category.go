@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber"
 )
 
+// GetAllCategories to fetch all categories out there
 func GetAllCategories(c *fiber.Ctx) {
 	db := database.DB
 	var categories []model.Category
@@ -18,6 +19,7 @@ func GetAllCategories(c *fiber.Ctx) {
 	c.JSON(fiber.Map{"status": "success", "message": "All categories", "data": categoryList})
 }
 
+// GetCategory to fetch a category if it exists
 func GetCategory(c *fiber.Ctx) {
 	id := c.Params("id")
 	db := database.DB
@@ -30,6 +32,7 @@ func GetCategory(c *fiber.Ctx) {
 	c.JSON(fiber.Map{"status": "success", "message": "Category found", "data": category.CategoryGet()})
 }
 
+// CreateCategory to create a brand new category
 func CreateCategory(c *fiber.Ctx) {
 	db := database.DB
 	category := new(model.Category)
@@ -45,6 +48,7 @@ func CreateCategory(c *fiber.Ctx) {
 	c.JSON(fiber.Map{"status": "success", "message": "Created category", "data": category})
 }
 
+// UpdateCategory to update a category if it exists
 func UpdateCategory(c *fiber.Ctx) {
 	id := c.Params("id")
 	db := database.DB
@@ -69,6 +73,7 @@ func UpdateCategory(c *fiber.Ctx) {
 	c.JSON(fiber.Map{"status": "success", "message": "Updated category", "data": category})
 }
 
+// DeleteCategory to delete a category if it exists
 func DeleteCategory(c *fiber.Ctx) {
 	id := c.Params("id")
 	db := database.DB

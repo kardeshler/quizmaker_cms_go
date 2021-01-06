@@ -29,9 +29,10 @@ func ConnectDB() {
 
 	fmt.Println("Connection opened to databae")
 	DB.AutoMigrate(&model.Category{})
-	/*DB.AutoMigrate(&model.Language{})
+	DB.AutoMigrate(&model.Language{})
 	DB.AutoMigrate(&model.Platform{})
 	DB.AutoMigrate(&model.Question{})
-	DB.AutoMigrate(&model.Quiz{})*/
+	DB.AutoMigrate(&model.Quiz{})
+	DB.AutoMigrate(&model.Option{})
 	fmt.Println("Database Migrated")
 }

@@ -10,7 +10,7 @@ type Category struct {
 	gorm.Model
 	Name        string
 	Description string
-	Platforms   []Platform `gorm:"many2many:category_platforms"`
+	Platforms   []Platform `gorm:"many2many:platform_categories"`
 	Quizzes     []Quiz     `gorm:"many2many:category_quizzes"`
 }
 

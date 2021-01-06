@@ -10,7 +10,7 @@ type Language struct {
 	gorm.Model
 	Name      string
 	ShortName string
-	Platforms []Platform `gorm:"many2many:language_platforms;"`
+	Platforms []Platform `gorm:"many2many:platform_languages;"`
 }
 
 type LanguageCreate struct {
