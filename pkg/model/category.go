@@ -24,7 +24,13 @@ func (c *Category) CategoryGet() CategoryGet {
 	}
 }
 
-type CategoryCreate struct {
+type CategoryCreateUpdate struct {
+	Name          string   `json:"name"`
+	Description   string   `json:"description"`
+	PlatformNames []string `json:"platforms"`
+}
+
+type CategoryCreateLite struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
