@@ -95,6 +95,8 @@ func UpdateCategory(c *fiber.Ctx) {
 
 	if len(filteredPlatforms) > 0 {
 		fmt.Println("Adding new platforms +", filteredPlatforms)
+		// when you add the same platforms to other categories, gorm recreates new records for the same platforms, redundancy!
+		// update: this is fixed with fetching the platform with its name in filterToCreate function
 		db.Model(&category).Association("Platforms").Append(filteredPlatforms)
 	}
 	if len(deletePlatforms) > 0 {
@@ -118,6 +120,7 @@ func filterToCreate(old []model.Platform, new []model.Platform) (out []model.Pla
 
 	for _, v := range new {
 		if _, ok := filterMap[v.Name]; ok == false {
+			database.DB.Where("name = ?", v.Name).First(&v)
 			out = append(out, v)
 		}
 	}

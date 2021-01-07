@@ -12,3 +12,9 @@ type Option struct {
 	IsCorrect  bool
 	QuestionID uint
 }
+
+// OptionCreate to create new option instances
+type OptionCreate struct {
+	Content   string
+	IsCorrect bool
+}
