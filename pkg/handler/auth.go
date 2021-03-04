@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber"
 )
 
+// Login to login with username and password todo: what else can be done instead of username:password?
 func Login(c *fiber.Ctx) {
 	type LoginInput struct {
 		Identity string `json:"identity"`

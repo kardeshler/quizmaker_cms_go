@@ -27,31 +27,37 @@ func SetupRoutes(app *fiber.App) {
 
 	// Languages
 	language := api.Group("/languages")
-	language.Get("/", handler.Hello)
-	language.Get("/:id", handler.Hello)
-	language.Post("/", middleware.Protected(), handler.Hello)
-	language.Delete("/:id", middleware.Protected(), handler.Hello)
+	language.Get("/", middleware.Protected(), handler.GetAllLanguages)
+	language.Get("/:id", middleware.Protected(), handler.GetLanguage)
+	language.Post("/", middleware.Protected(), handler.CreateLanguage)
+	language.Put("/:id", middleware.Protected(), handler.UpdateLanguage)
+	language.Delete("/:id", middleware.Protected(), handler.DeleteLanguage)
 
 	// Platforms
 	platform := api.Group("/platforms")
-	platform.Get("/", handler.Hello)
-	platform.Get("/:id", handler.Hello)
-	platform.Post("/", middleware.Protected(), handler.Hello)
-	platform.Delete("/:id", middleware.Protected(), handler.Hello)
+	platform.Get("/", middleware.Protected(), handler.GetAllPlatforms)
+	platform.Get("/:id", middleware.Protected(), handler.GetPlatform)
+	platform.Post("/", middleware.Protected(), handler.CreatePlatform)
+	platform.Put("/:id", middleware.Protected(), handler.UpdatePlatform)
+	platform.Delete("/:id", middleware.Protected(), handler.DeletePlatform)
+	platform.Get("/:id/questions", middleware.Protected(), handler.GetQuizzesOfPlatform)
+	platform.Get("/:id/quizzes", middleware.Protected(), handler.GetQuizzesOfPlatform)
 
 	// Questions
 	questions := api.Group("/questions")
-	questions.Get("/", handler.Hello)
-	questions.Get("/:id", handler.Hello)
-	questions.Post("/", middleware.Protected(), handler.Hello)
-	questions.Delete("/:id", middleware.Protected(), handler.Hello)
+	questions.Get("/", middleware.Protected(), handler.GetAllQuestions)
+	questions.Get("/:id", middleware.Protected(), handler.GetQuestion)
+	questions.Post("/", middleware.Protected(), handler.CreateQuestion)
+	questions.Put("/:id", middleware.Protected(), handler.UpdateQuestion)
+	questions.Delete("/:id", middleware.Protected(), handler.DeleteQuestion)
 	// todo: add questions of a platform, of a category, of a language, etc
 
 	// Quizzes
 	quizzes := api.Group("/quizzes")
-	quizzes.Get("/", handler.Hello)
-	quizzes.Get("/:id", handler.Hello)
-	quizzes.Post("/", middleware.Protected(), handler.Hello)
-	quizzes.Delete("/:id", middleware.Protected(), handler.Hello)
+	quizzes.Get("/", middleware.Protected(), handler.GetAllQuizzes)
+	quizzes.Get("/:id", middleware.Protected(), handler.GetQuiz)
+	quizzes.Post("/", middleware.Protected(), handler.CreateQuiz)
+	quizzes.Put("/", middleware.Protected(), handler.UpdateQuiz)
+	quizzes.Delete("/:id", middleware.Protected(), handler.DeleteQuiz)
 	// todo: add quizzes of a platform, of a category, of a language, etc
 }
