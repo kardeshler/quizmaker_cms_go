@@ -11,6 +11,7 @@ type Language struct {
 	gorm.Model
 	Name      string
 	ShortName string
+	Questions []Question `gorm:"ForeignKey:LanguageID"`
 	Platforms []Platform `gorm:"many2many:platform_languages;"`
 }
 
@@ -33,6 +34,13 @@ type LanguageGet struct {
 type LanguageGetLite struct {
 	Name      string `json:"name"`
 	ShortName string `json:"short_name"`
+}
+
+// New is a de facto constructor method
+func (l *Language) New(id uint) *Language {
+	lg := new(Language)
+	lg.ID = id
+	return lg
 }
 
 // LanguageGet getter method for Language type
