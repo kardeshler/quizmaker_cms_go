@@ -7,7 +7,8 @@ type Question struct {
 	gorm.Model
 	Content    string
 	Hint       string
-	LanguageID uint
+	LanguageID uint `gorm:"column:language_id"`
+	Language   Language
 	QuizID     uint
 	Options    []Option
 }

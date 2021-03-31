@@ -78,50 +78,66 @@ func UpdateQuestion(c *fiber.Ctx) {
 	id := c.Params("id")
 	db := database.DB
 
-	newQuestion := new(model.Question)
-	if err := c.BodyParser(newQuestion); err != nil {
+	form := new(model.QuestionCreate)
+	if err := c.BodyParser(form); err != nil {
 		c.Status(400).JSON(fiber.Map{"status": "error", "message": "Could not parse request!", "data": nil})
 		return
 	}
 
-	var oldQuestion model.Question
-	db.Preload("Options").First(&oldQuestion, id)
-	if oldQuestion.ID == 0 {
+	var question model.Question
+	db.Preload("Options").First(&question, id)
+	if question.ID == 0 {
 		c.Status(404).JSON(fiber.Map{"status": "error", "message": "Question not found!", "data": nil})
 		return
 	}
 
-	oldQuestion.Content = newQuestion.Content
-	oldQuestion.Hint = newQuestion.Hint
-	oldQuestion.QuizID = newQuestion.QuizID
+	question.Content = form.Content
+	question.Hint = form.Hint
+	question.QuizID = form.QuizID
+	question.LanguageID = form.LanguageID
 
-	oldOptions := oldQuestion.Options
-	newOptions := newQuestion.Options
-	filteredOptions := filterQptions(oldOptions, newOptions)
-	fmt.Println("Adding new options to the question +", filteredOptions)
-	deleteOptions := filterQptions(newOptions, oldOptions)
-	fmt.Println("Removing unwanted options from the question +", deleteOptions)
+	/*lang := new(model.Language)
+	lang = lang.New(form.LanguageID)
+	fmt.Println("hasan", lang)
+	db.First(&lang, form.LanguageID)
+	fmt.Println("osman", lang)
+	db.Model(&question).Association("LanguageID").Replace(lang)*/
+
+	oldOptions := question.Options
+
+	newOptions := make([]model.Option, 0)
+	if len(form.Options) > 0 {
+		for _, v := range form.Options {
+			newOptions = append(newOptions, model.Option{
+				Content:   v.Content,
+				IsCorrect: v.IsCorrect,
+			})
+		}
+	}
+
+	filteredOptions := filterOptions(oldOptions, newOptions)
+	deleteOptions := filterOptions(newOptions, oldOptions)
 
 	if len(filteredOptions) > 0 {
 		fmt.Println("Adding new options to the question +", filteredOptions)
-		db.Model(&oldQuestion).Association("Options").Append(filteredOptions)
+		db.Model(&question).Association("Options").Append(filteredOptions)
 	}
 	if len(deleteOptions) > 0 {
 		fmt.Println("Removing unwanted options from the question +", deleteOptions)
-		db.Model(&oldQuestion).Association("Options").Delete(deleteOptions)
+		db.Model(&question).Association("Options").Delete(deleteOptions)
 	}
 
-	db.Save(&oldQuestion)
+	db.Save(&question)
 
 	if db.Error != nil {
 		c.Status(500).JSON(fiber.Map{"status": "error", "message": "Could not update question!", "data": nil})
 		return
 	}
 
-	c.JSON(fiber.Map{"status": "success", "message": "Question updated", "data": oldQuestion.ID})
+	c.JSON(fiber.Map{"status": "success", "message": "Question updated", "data": question.ID})
 }
 
-func filterQptions(base []model.Option, target []model.Option) (out []model.Option) {
+func filterOptions(base []model.Option, target []model.Option) (out []model.Option) {
 	filterMap := make(map[uint]struct{}, len(base))
 	for _, v := range base {
 		filterMap[v.ID] = struct{}{}
